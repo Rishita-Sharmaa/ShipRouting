@@ -52,7 +52,7 @@ export default function Sidebar({
       },
     },
     open: {
-      width: "28rem", // Slightly wider
+      width: "30rem", // Increased width for better readability
       transition: {
         type: "tween",
         duration: 0.3,
@@ -108,18 +108,33 @@ export default function Sidebar({
         flex 
         overflow-hidden
         rounded-r-3xl
+        w-[5rem] 
+        sm:w-auto
+        min-h-screen
       `}
     >
       {/* Sidebar Navigation */}
-      <div className="w-20 border-r dark:border-gray-800 py-6 flex flex-col items-center bg-gray-50 dark:bg-gray-950">
+      <div
+        className={`
+        w-20 border-r dark:border-gray-800 py-6 
+        flex flex-col items-center 
+        bg-gray-50 dark:bg-gray-950
+        transition-all duration-300
+        flex-shrink-0
+      `}
+      >
         <div className="mb-6">
-          <Ship className="text-emerald-600 dark:text-emerald-400" size={32} />
+          <Ship
+            className="text-emerald-600 dark:text-emerald-400 
+            transition-all duration-300"
+            size={32}
+          />
         </div>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="space-y-4"
+          className="space-y-4 flex flex-col items-center"
         >
           <NavIcon icon={Map} label="Route Planning" tab="route" />
           <NavIcon icon={Settings} label="Settings" tab="settings" />
@@ -143,9 +158,18 @@ export default function Sidebar({
       </div>
 
       {/* Content Area */}
-      <div className="flex-1 p-6 overflow-y-auto bg-white dark:bg-gray-900">
+      <div
+        className={`
+          flex-1 p-6 overflow-y-auto 
+          bg-white dark:bg-gray-900
+          transition-all duration-300
+          ${
+            isNavOpen ? "opacity-100 visible w-full" : "opacity-0 invisible w-0"
+          }
+        `}
+      >
         <AnimatePresence mode="wait">
-          {activeTab === "route" && (
+          {isNavOpen && activeTab === "route" && (
             <motion.div
               key="route"
               initial={{ opacity: 0, x: -20 }}
@@ -156,7 +180,7 @@ export default function Sidebar({
             >
               <div className="flex items-center justify-between">
                 <motion.h1
-                  className="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-3"
+                  className="text-3xl sm:text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 flex items-center gap-3"
                   initial={{ opacity: 0, y: -20 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
@@ -168,7 +192,7 @@ export default function Sidebar({
                 </Badge>
               </div>
 
-              <Card className="p-6 bg-gray-50 dark:bg-gray-800/50 border-none">
+              <Card className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-800/50 border-none">
                 <RouteForm
                   setSelectedRoute={setSelectedRoute}
                   isNavOpen={isNavOpen}
@@ -180,7 +204,7 @@ export default function Sidebar({
             </motion.div>
           )}
 
-          {activeTab === "settings" && (
+          {isNavOpen && activeTab === "settings" && (
             <motion.div
               key="settings"
               initial={{ opacity: 0, x: -20 }}
@@ -189,10 +213,10 @@ export default function Sidebar({
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                 Settings
               </h2>
-              <Card className="p-6 bg-gray-50 dark:bg-gray-800/50 border-none">
+              <Card className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-800/50 border-none">
                 <p className="text-gray-600 dark:text-gray-400">
                   Routing and application settings coming soon...
                 </p>
@@ -200,7 +224,7 @@ export default function Sidebar({
             </motion.div>
           )}
 
-          {activeTab === "info" && (
+          {isNavOpen && activeTab === "info" && (
             <motion.div
               key="info"
               initial={{ opacity: 0, x: -20 }}
@@ -209,10 +233,10 @@ export default function Sidebar({
               transition={{ duration: 0.3 }}
               className="space-y-6"
             >
-              <h2 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-gray-200">
                 About
               </h2>
-              <Card className="p-6 bg-gray-50 dark:bg-gray-800/50 border-none space-y-4">
+              <Card className="p-4 sm:p-6 bg-gray-50 dark:bg-gray-800/50 border-none space-y-4">
                 <p className="text-gray-600 dark:text-gray-400">
                   Optimal Ship Routing helps plan the most efficient maritime
                   routes using advanced algorithms and real-time data.

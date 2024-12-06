@@ -17,7 +17,8 @@ interface RouteFormProps {
 
 export default function RouteForm({ setSelectedRoute, isNavOpen, startPort, endPort, setIsSelectingLocation }: RouteFormProps) {
   const [shipType, setShipType] = useState('')
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(new Date(2024, 7, 25))
+  const [departureDate, setDepartureDate] = useState<Date | undefined>(new Date());
+
   const [isLoading, setIsLoading] = useState(false)
   const [currentError, setCurrentError] = useState<string | null>(null)
 
@@ -130,7 +131,7 @@ export default function RouteForm({ setSelectedRoute, isNavOpen, startPort, endP
           setDate={(newDate) => setDepartureDate(newDate)}
         />
         {currentError === "Departure date is required" && (
-          <p className="text-red-500 text-sm mt-1">{currentError}</p>
+          <p className="text-red-500 text-sm mt-1">{currentError}</p> 
         )}
       </motion.div>
 

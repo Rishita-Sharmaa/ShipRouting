@@ -1,42 +1,61 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Calendar as CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
+import * as React from "react";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-const availableDates = [
-  new Date(2024, 7, 25),
-  new Date(2024, 7, 26),
-  new Date(2024, 7, 27),
-  new Date(2024, 7, 28),
-  new Date(2024, 7, 29),
-]
-
-function DatePickerDemo({ setDate, date }: { setDate: (date: Date) => void, date: Date | undefined }) {
-  const handleDateChange = (value: string) => {
-    const newDate = new Date(value)
-    setDate(newDate)
+// Function to generate dynamic available dates
+const generateAvailableDates = (startDate: Date, days: number) => {
+  const dates = [];
+  for (let i = 0; i < days; i++) {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + i);
+    dates.push(date);
   }
+  return dates;
+};
+
+function DatePickerDemo({
+  setDate,
+  date,
+}: {
+  setDate: (date: Date) => void;
+  date: Date | undefined;
+}) {
+  const availableDates = React.useMemo(
+    () => generateAvailableDates(new Date(), 10),
+    []
+  );
+
+  const handleDateChange = (value: string) => {
+    const newDate = new Date(value);
+    setDate(newDate);
+  };
 
   return (
-    <Select onValueChange={handleDateChange} value={date?.toISOString()}>
+    <Select
+      onValueChange={handleDateChange}
+      value={date ? date.toISOString() : undefined}
+    >
       <SelectTrigger className="w-[200px]">
-        <SelectValue placeholder="Select date" />
+        <SelectValue placeholder="Select date">
+          {date && format(date, "MMMM d, yyyy")}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {availableDates.map((d) => (
@@ -46,26 +65,19 @@ function DatePickerDemo({ setDate, date }: { setDate: (date: Date) => void, date
         ))}
       </SelectContent>
     </Select>
-  )
+  );
 }
 
 export function DateTimePicker({
   date,
   setDate,
 }: {
-  date: Date | undefined
-  setDate: (date: Date | undefined) => void
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
 }) {
-  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(date)
-
-  React.useEffect(() => {
-    setSelectedDate(date)
-  }, [date])
-
   const handleDateChange = (newDate: Date) => {
-    setSelectedDate(newDate)
-    setDate(newDate)
-  }
+    setDate(newDate);
+  };
 
   return (
     <Popover>
@@ -82,11 +94,8 @@ export function DateTimePicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-4">
-        <DatePickerDemo 
-          setDate={handleDateChange}
-          date={selectedDate}
-        />
+        <DatePickerDemo setDate={handleDateChange} date={date} />
       </PopoverContent>
     </Popover>
-  )
+  );
 }
